@@ -1,0 +1,51 @@
+# CITATION.cff — place this file at the repository root
+# Docs: https://citation-file-format.github.io/
+cff-version: 1.2.0
+message: "If you use this software, please cite it using the metadata below."
+title: "synthsensor: Synthetic Two-Sensor Time Series with Labeled Anomalies"
+version: 0.0.0.9000
+date-released: 2025-09-15
+doi: null   # replace with Zenodo DOI after your first release (e.g., 10.5281/zenodo.1234567)
+license: MIT
+type: software
+abstract: >
+  Provides functions to generate synthetic time series from two redundant or
+  correlated sensors, with configurable background signals (AR(1), random walk,
+  Poisson moving average, sine), sensor delay/attenuation, correlated or
+  uncorrelated noise, and anomalies including spikes and drifts. Outputs include
+  per-timestep anomaly flags and true error proxies. Includes an interactive
+  Shiny app for exploration and CSV export.
+repository-code: "https://github.com/AstridMarie2/synthsensor"
+url: "https://github.com/AstridMarie2/synthsensor"
+keywords:
+  - synthetic data
+  - time series
+  - sensors
+  - anomaly detection
+  - uncertainty
+  - R
+  - Shiny
+authors:
+  - family-names: "Skålvik"
+    given-names: "Astrid Marie"
+    orcid: "https://orcid.org/0000-0002-0806-2818"
+    email: "astrid.marie.skalvik@gmail.com"
+    affiliation: "University of Bergen"
+    roles: [ "author", "maintainer" ]
+preferred-citation:
+  type: article
+  authors:
+    - family-names: "Skålvik"
+      given-names: "Astrid Marie"
+      orcid: "https://orcid.org/0000-0002-0806-2818"
+  title: "synthsensor: Synthetic Two-Sensor Time Series with Labeled Anomalies"
+  year: 2025
+  journal: "Journal of Open Source Software"
+  volume: null
+  number: null
+  pages: null
+  doi: null   # fill with JOSS DOI after acceptance
+  url: "https://github.com/AstridMarie2/synthsensor"
+contact:
+  - email: "Astrid.marie.skalvik@gmail.com"
+    name: "<Astrid Marie Skålvik"
