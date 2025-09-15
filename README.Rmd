@@ -9,12 +9,15 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   fig.path = "man/figures/README-",
-  out.width = "100%",
-  # Make functions available without installing
-  if (requireNamespace("devtools", quietly = TRUE)) {
-  devtools::load_all(".")
-  }
+  out.width = "100%"
 )
+
+# Make package functions available during render without installing
+if (requireNamespace("devtools", quietly = TRUE)) {
+  devtools::load_all(".")
+}
+set.seed(123)
+
 ```
 
 # synthsensor
@@ -23,37 +26,100 @@ knitr::opts_chunk$set(
 [![R-CMD-check](https://github.com/AstridMarie2/synthsensor/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/AstridMarie2/synthsensor/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-The goal of synthsensor is to ...
+**synthsensor** generates **labeled, two-sensor synthetic time series** for benchmarking sensor diagnostics and uncertainty methods.
+It supports configurable background signals (AR(1), random walk, Poisson moving average, sine), **delay/attenuation**, **noise & bias, spikes** (correlated/uncorrelated), and **drifts**, and outputs per-timestep **anomaly flags** and **true error** proxies.
+
+- Reproducible datasets for detection/diagnostics research
+- Scriptable functions **and** an interactive Shiny app
+- Labeled outputs for supervised and rule-based evaluation
 
 ## Installation
 
-You can install the development version of synthsensor like so:
+Development version from GitHub:
 
 ``` r
-# FILL THIS IN! HOW CAN PEOPLE INSTALL YOUR DEV PACKAGE?
+# install.packages("remotes")
+remotes::install_github("AstridMarie2/synthsensor")
 ```
 
-## Example
+Or work from source during development:
 
-This is a basic example which shows you how to solve a common problem:
+``` r
+# install.packages("remotes")
+devtools::load_all(".")
+```
+
+
+## Anomaly flags
+AnomalyFlag1/2 are factors with levels:
+Normal, Drift, Spike, Both, SpikeCorr
+**Overlap rule**: any Drift overlapping with Spike or SpikeCorr is labeled Both.
+**Correlation**: windows injected as “correlated spikes” are flagged SpikeCorr on both sensors.
+
+
+## Minimal example
+
+Generate a short dataset with a sine background, Gaussian noise, and a few uncorrelated spikes:
 
 ```{r example}
-#library(synthsensor)
-## basic example code
+library(synthsensor)
+
+df <- generate_data_function(
+  n = 300,
+  add_background   = TRUE,
+  background_type  = "Sine Wave",
+  sine_amplitude   = 2,
+  sine_period      = 30,
+  sd1 = 0.15, sd2 = 0.15,
+  crosscor_noise   = 0,
+  mean1 = 0.5, mean2 = -0.5,
+  # anomalies
+  n_spikes_corr    = 0,
+  n_spikes_s1      = 3,
+  n_spikes_s2      = 2,
+  max_spike_length = 6,
+  n_drifts_s1      = 1,
+  n_drifts_s2      = 0,
+  drift_duration   = c(25, 35),
+  drift_slope      = c(0.05, 0.08),
+  delayed_sensor   = "None",
+  alpha_ema        = 0.3
+)
+
+head(df)
+
 ```
 
-What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
+Quick look at the series and labels:
+```{r}
+oldpar <- par(no.readonly = TRUE); on.exit(par(oldpar))
+par(mar = c(3,4,1,1))
+plot(df$TimeSinceClean, df$Sensor1, type = "l", xlab = "t", ylab = "Reading")
+lines(df$TimeSinceClean, df$Sensor2, lty = 2)
+legend("topleft", legend = c("Sensor1","Sensor2"), lty = c(1,2), bty = "n")
 
-```{r cars}
-#summary(cars)
+table(Anom1 = df$AnomalyFlag1)
+table(Anom2 = df$AnomalyFlag2)
+
 ```
 
-You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date. `devtools::build_readme()` is handy for this.
-
-You can also embed plots, for example:
-
-```{r pressure, echo = FALSE}
-#plot(pressure)
+# Shiny app
+Launch the interactive app:
+```{r}
+# synthsensor::app_synth()
 ```
+The app lets you configure parameters, visualize results, and export CSV with labels.
 
-In that case, don't forget to commit and push the resulting figure files, so they display on GitHub and CRAN.
+# Testing
+Run the automated tests:
+```{r}
+devtools::test()
+```
+Continuous Integration runs R CMD check and tests on pushes/PRs (see the badge above).
+
+
+# Citation
+If you use **synthsensor** in research, please cite the software (Zenodo DOI) and the JOSS paper (once available).
+
+# Licence
+MIT (C) Astrid Marie Skålvik

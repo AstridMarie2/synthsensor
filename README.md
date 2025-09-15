@@ -4,6 +4,8 @@
 # synthsensor
 
 <!-- badges: start -->
+
+[![R-CMD-check](https://github.com/AstridMarie2/synthsensor/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/AstridMarie2/synthsensor/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 The goal of synthsensor is to …
@@ -16,20 +18,20 @@ You can install the development version of synthsensor like so:
 # FILL THIS IN! HOW CAN PEOPLE INSTALL YOUR DEV PACKAGE?
 ```
 
+## Anomaly flags
+
+AnomalyFlag1/2 are factors with levels: Normal, Drift, Spike, Both,
+SpikeCorr Overlap rule: any Drift overlapping with Spike or SpikeCorr is
+labeled Both. Correlated spikes use SpikeCorr; uncorrelated spikes use
+Spike.
+
 ## Example
 
 This is a basic example which shows you how to solve a common problem:
 
 ``` r
-#library(synthsensor)
+library(synthsensor)
 ## basic example code
-```
-
-What is special about using `README.Rmd` instead of just `README.md`?
-You can include R chunks like so:
-
-``` r
-#summary(cars)
 ```
 
 You’ll still need to render `README.Rmd` regularly, to keep `README.md`
