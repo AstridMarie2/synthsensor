@@ -22,6 +22,7 @@ generate_data_from_input <- function(input) {
     n_spikes_s1 = input$n_spikes_s1,
     n_spikes_s2 = input$n_spikes_s2,
     max_spike_length = input$max_spike_length,
+    spike_size = input$spike_size,
     n_drifts_s1 = input$n_drifts_s1,
     n_drifts_s2 = input$n_drifts_s2,
     drift_duration = input$drift_duration,

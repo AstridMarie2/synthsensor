@@ -28,6 +28,7 @@ generate_data_function(
   n_spikes_s1 = 0L,
   n_spikes_s2 = 0L,
   max_spike_length = 5L,
+  spike_size = 1,
   n_drifts_s1 = 0L,
   n_drifts_s2 = 0L,
   drift_duration = c(20L, 40L),
@@ -64,6 +65,8 @@ generate_data_function(
 \item{n_spikes_s1, n_spikes_s2}{Integers >= 0. Uncorrelated spikes per sensor.}
 
 \item{max_spike_length}{Integer >= 1. Max spike window length.}
+
+\item{spike_size}{Max Spike Magnitude as frac. of mean, minimum 1.}
 
 \item{n_drifts_s1, n_drifts_s2}{Integers >= 0. Uncorrelated drift windows per sensor.}
 

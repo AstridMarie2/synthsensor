@@ -15,6 +15,7 @@
 #' @param n_spikes_corr Integer >= 0. Number of correlated spike windows.
 #' @param n_spikes_s1,n_spikes_s2 Integers >= 0. Uncorrelated spikes per sensor.
 #' @param max_spike_length Integer >= 1. Max spike window length.
+#' @param spike_size Max Spike Magnitude as frac. of mean, minimum 1.
 #' @param n_drifts_s1,n_drifts_s2 Integers >= 0. Uncorrelated drift windows per sensor.
 #' @param drift_duration Integer vector length 2, c(min, max), min >= 2.
 #' @param drift_slope Numeric vector length 2, c(min, max). Linear drift slope range.
@@ -42,6 +43,7 @@ generate_data_function <- function(
     n_spikes_corr = 0L,
     n_spikes_s1 = 0L, n_spikes_s2 = 0L,
     max_spike_length = 5L,
+    spike_size = 1,
     n_drifts_s1 = 0L, n_drifts_s2 = 0L,
     drift_duration = c(20L, 40L),
     drift_slope = c(-0.05, 0.05)
@@ -109,8 +111,8 @@ generate_data_function <- function(
 
   # ---- spike amplitude bounds
   min_amp1 <- 2 * sd1; min_amp2 <- 2 * sd2
-  max_amp1 <- max(min_amp1 * 1.05, mean1 *  input_spike_size_guard(mean1)) # see guard below
-  max_amp2 <- max(min_amp2 * 1.05, mean2 *  input_spike_size_guard(mean2))
+  max_amp1 <- max(mean1 * spike_size, mean1 * 1)
+  max_amp2 <- max(mean2 * spike_size, mean2 * 1)
 
   draw_uamp <- function(minv, maxv) runif(1, minv, maxv)
 
@@ -193,10 +195,4 @@ generate_data_function <- function(
   df
 }
 
-# Guard used above: when mean is tiny/negative, avoid degenerate spike upper bound
-#' @keywords internal
-input_spike_size_guard <- function(m) {
-  # If mean is near zero or negative, return a small positive multiplier to avoid zero/neg upper bounds
-  if (is.na(m) || m <= 0) return(2.0) # arbitrary fallback
-  1.0
-}
+
