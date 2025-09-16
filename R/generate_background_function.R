@@ -56,14 +56,37 @@ generate_background_function <- function(
   } else if (background_type == "AR(1) Process") {
     stopifnot(!is.null(background_phi), abs(background_phi) < 1)
     stopifnot(!is.null(background_rho), background_rho >= -1, background_rho <= 1)
-    cov_matrix <- matrix(c(1, background_rho, background_rho, 1), nrow = 2)
-    innovations <- MASS::mvrnorm(n, mu = c(0, 0), Sigma = cov_matrix)
+
     sensor1 <- numeric(n); sensor2 <- numeric(n)
-    sensor1[1] <- stats::rnorm(1, 0, 1 / sqrt(1 - background_phi^2))
-    sensor2[1] <- stats::rnorm(1, 0, 1 / sqrt(1 - background_phi^2))
-    for (t in 2:n) {
-      sensor1[t] <- background_phi * sensor1[t - 1] + innovations[t, 1]
-      sensor2[t] <- background_phi * sensor2[t - 1] + innovations[t, 2]
+
+    if (background_rho == 1) {
+      # Draw shared initial value
+      init_val <- stats::rnorm(1, mean = 0, sd = sqrt(1 / (1 - background_phi^2)))
+      sensor1[1] <- init_val
+      sensor2[1] <- init_val
+
+      # Draw shared innovations
+      shared_innovations <- stats::rnorm(n, mean = 0, sd = 1)
+      for (t in 2:n) {
+        sensor1[t] <- background_phi * sensor1[t - 1] + shared_innovations[t]
+        sensor2[t] <- background_phi * sensor2[t - 1] + shared_innovations[t]
+      }
+    } else {
+
+      cov_matrix <- matrix(c(1, background_rho, background_rho, 1), nrow = 2)
+
+      # Draw initial values from stationary distribution
+      init_cov <- cov_matrix / (1 - background_phi^2)
+      init_vals <- MASS::mvrnorm(1, mu = c(0, 0), Sigma = init_cov)
+
+      innovations <- MASS::mvrnorm(n, mu = c(0, 0), Sigma = cov_matrix)
+
+      sensor1[1] <- init_vals[1]
+      sensor2[1] <- init_vals[2]
+        for (t in 2:n) {
+          sensor1[t] <- background_phi * sensor1[t - 1] + innovations[t, 1]
+          sensor2[t] <- background_phi * sensor2[t - 1] + innovations[t, 2]
+        }
     }
     return(list(sensor1 = sensor1, sensor2 = sensor2))
   }
