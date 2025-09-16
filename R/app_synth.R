@@ -1,14 +1,23 @@
-# library(shiny)
-# library(MASS)
-# library(ggplot2)
-# library(zoo)
-
-# Rev 15.09.25: Made UI more robust. Saved functions separately. Optimized for testthat and JOSS submission
-# Rev 11.08.25: Delay and attenuation included
-# Rev 08.08.25: Changed slightly wording in UI for crosscor_noise.
-# Rev 28.04.25: Ready for deployment
-# Rev 25.04.25: Separate tab for selecting and visualizing different background processes.
-
+#' Launch the Synthetic Sensor Data Shiny App
+#'
+#' Opens an interactive UI for configuring background processes, sensor delay/attenuation,
+#' noise and bias, and injecting anomalies (spikes, drifts). The app visualizes the
+#' generated two-sensor time series and anomaly labels, and lets you download a CSV.
+#'
+#' @details
+#' The app calls \code{generate_background_function()} and \code{generate_data_function()}
+#' under the hood. It is intended for exploration and demonstration; for scripted
+#' workflows use the functions directly.
+#'
+#' @return A \code{shiny.appobj} (invisibly). Called for its side effect of launching the app.
+#'
+#' @examples
+#' \dontrun{
+#'   # Launch the app
+#'   synthsensor::app_synth()
+#' }
+#'
+#' @seealso [generate_background_function()], [generate_data_function()]
 #' @export
 app_synth <- function() {
   ui <- shiny::navbarPage(
@@ -139,11 +148,11 @@ server <- function(input, output) {
   output$backgroundPlot <- shiny::renderPlot({
     shiny::req(background_preview())
     bg <- background_preview()
-    plot(bg$sensor1, type = "l", col = "blue", lwd = 2, ylim = range(c(bg$sensor1, bg$sensor2)),
+    graphics::plot(bg$sensor1, type = "l", col = "blue", lwd = 2, ylim = range(c(bg$sensor1, bg$sensor2)),
          main = paste("Background Process:", input$background_type),
          ylab = "Variation", xlab = "Time Steps")
-    lines(bg$sensor2, col = "red", lwd = 2)
-    legend("topright", legend = c("Sensor 1", "Sensor 2"), col = c("blue", "red"), lty = 1)
+    graphics::lines(bg$sensor2, col = "red", lwd = 2)
+    graphics::legend("topright", legend = c("Sensor 1", "Sensor 2"), col = c("blue", "red"), lty = 1)
   })
 
 
@@ -152,13 +161,13 @@ server <- function(input, output) {
 
     # Sensor plot
     plotsensor <- ggplot2::ggplot(df, ggplot2::aes(x = Date)) +
-      geom_line(ggplot2::aes(y = Sensor1, color = "Sensor1")) +
-      geom_line(ggplot2::aes(y = Sensor2, color = "Sensor2")) +
-      geom_line(ggplot2::aes(y = Diff, color = "Diff")) +
+      ggplot2::geom_line(ggplot2::aes(y = Sensor1, color = "Sensor1")) +
+      ggplot2::geom_line(ggplot2::aes(y = Sensor2, color = "Sensor2")) +
+      ggplot2::geom_line(ggplot2::aes(y = Diff, color = "Diff")) +
       ggplot2::labs(title = "Synthetic Sensor Data", y = "Measurement", color = "") +
-      scale_color_manual(values = c("Diff" = "darkgreen", "Sensor1" = "blue", "Sensor2" = "black")) +
-      theme_minimal() +
-      theme(legend.position = "bottom")
+      ggplot2::scale_color_manual(values = c("Diff" = "darkgreen", "Sensor1" = "blue", "Sensor2" = "black")) +
+      ggplot2::theme_minimal() +
+      ggplot2::theme(legend.position = "bottom")
 
     # Rename labels
     levels(df$AnomalyFlag1)[levels(df$AnomalyFlag1) == "SpikeCorr"] <- "Correlated spike"
@@ -167,7 +176,7 @@ server <- function(input, output) {
     # Anomaly plot for Sensor 1
     runs1 <- rle(as.character(df$AnomalyFlag1))
     ends1 <- cumsum(runs1$lengths)
-    starts1 <- c(1, head(ends1, -1) + 1)
+    starts1 <- c(1, utils::head(ends1, -1) + 1)
     anomaly_bands1 <- data.frame(
       start = df$Date[starts1],
       end = df$Date[ends1],
@@ -176,8 +185,8 @@ server <- function(input, output) {
     anomaly_bands1 <- anomaly_bands1[anomaly_bands1$type != "Normal", ]
 
     plotanomaly1 <- ggplot2::ggplot(df, ggplot2::aes(x = Date, y = Sensor1)) +
-      geom_line(color = "blue") +
-      geom_rect(data = anomaly_bands1, ggplot2::aes(xmin = start, xmax = end, ymin = -Inf, ymax = Inf, fill = type),
+      ggplot2::geom_line(color = "blue") +
+      ggplot2::geom_rect(data = anomaly_bands1, ggplot2::aes(xmin = start, xmax = end, ymin = -Inf, ymax = Inf, fill = type),
                 inherit.aes = FALSE, alpha = 0.8) +
       ggplot2::scale_fill_manual(values = c("Drift" = "orange",
                                             "Spike" = "red",
@@ -185,12 +194,12 @@ server <- function(input, output) {
                                             "Both" = "purple")) +
       ggplot2::labs(title = "Sensor 1 Anomalies", y = "Sensor 1 Value", fill = "Anomaly Type") +
       ggplot2::theme_minimal() +
-      theme(legend.position = "bottom")
+      ggplot2::theme(legend.position = "bottom")
 
     # Anomaly plot for Sensor 2
     runs2 <- rle(as.character(df$AnomalyFlag2))
     ends2 <- cumsum(runs2$lengths)
-    starts2 <- c(1, head(ends2, -1) + 1)
+    starts2 <- c(1, utils::head(ends2, -1) + 1)
     anomaly_bands2 <- data.frame(
       start = df$Date[starts2],
       end = df$Date[ends2],
@@ -199,8 +208,8 @@ server <- function(input, output) {
     anomaly_bands2 <- anomaly_bands2[anomaly_bands2$type != "Normal", ]
 
     plotanomaly2 <- ggplot2::ggplot(df, ggplot2::aes(x = Date, y = Sensor2)) +
-      geom_line(color = "blue") +
-      geom_rect(data = anomaly_bands2, ggplot2::aes(xmin = start, xmax = end, ymin = -Inf, ymax = Inf, fill = type),
+      ggplot2::geom_line(color = "blue") +
+      ggplot2::geom_rect(data = anomaly_bands2, ggplot2::aes(xmin = start, xmax = end, ymin = -Inf, ymax = Inf, fill = type),
                 inherit.aes = FALSE, alpha = 0.8) +
       ggplot2::scale_fill_manual(values = c("Drift" = "orange",
                                             "Spike" = "red",
@@ -208,7 +217,7 @@ server <- function(input, output) {
                                             "Both" = "purple")) +
       ggplot2::labs(title = "Sensor 2 Anomalies", y = "Sensor 2 Value", fill = "Anomaly Type") +
       ggplot2::theme_minimal() +
-      theme(legend.position = "bottom")
+      ggplot2::theme(legend.position = "bottom")
 
     # Combine
     gridExtra::grid.arrange(plotsensor, plotanomaly1, plotanomaly2, ncol = 1, heights = c(2, 1, 1))
@@ -221,7 +230,7 @@ server <- function(input, output) {
       paste0("synthetic_data_", Sys.Date(), ".csv")
     },
     content = function(file) {
-      write.csv(generate_data_from_input(input), file, row.names = FALSE)
+      utils::write.csv(generate_data_from_input(input), file, row.names = FALSE)
     }
   )
 }

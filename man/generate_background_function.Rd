@@ -29,7 +29,7 @@ generate_background_function(
 
 \item{randomwalk_sd}{Numeric > 0. SD of RW increments.}
 
-\item{background_rho_rw}{Numeric in \link{-1, 1}. Correlation between RW increments.}
+\item{background_rho_rw}{Numeric between -1 and 1 (inclusive). Correlation between RW increments.}
 
 \item{sine_amplitude}{Numeric. Amplitude of the sine wave.}
 
@@ -37,7 +37,7 @@ generate_background_function(
 
 \item{background_phi}{Numeric in (-1, 1). AR(1) coefficient.}
 
-\item{background_rho}{Numeric in \link{-1, 1}. Correlation of AR(1) innovations across sensors.}
+\item{background_rho}{Numeric in between -1 and 1 (inclusive). Correlation of AR(1) innovations across sensors.}
 }
 \value{
 A list with numeric vectors \code{sensor1} and \code{sensor2}, each of length \code{n}.

@@ -10,7 +10,7 @@
 #' @param delayed_sensor Character. One of "None","Sensor1","Sensor2".
 #' @param alpha_ema Numeric in (0,1]; EMA coefficient when a sensor is delayed.
 #' @param sd1,sd2 Numeric > 0. Noise standard deviations.
-#' @param crosscor_noise Numeric in [-1, 1]. Correlation between sensor noise terms.
+#' @param crosscor_noise Numeric between -1 and 1 (inclusive). Correlation between sensor noise terms.
 #' @param mean1,mean2 Numeric. Target means added via noise shift.
 #' @param n_spikes_corr Integer >= 0. Number of correlated spike windows.
 #' @param n_spikes_s1,n_spikes_s2 Integers >= 0. Uncorrelated spikes per sensor.
@@ -114,7 +114,7 @@ generate_data_function <- function(
   max_amp1 <- max(mean1 * spike_size, mean1 * 1)
   max_amp2 <- max(mean2 * spike_size, mean2 * 1)
 
-  draw_uamp <- function(minv, maxv) runif(1, minv, maxv)
+  draw_uamp <- function(minv, maxv) stats::runif(1, minv, maxv)
 
   # ---- correlated spikes
   if (n_spikes_corr > 0) {
@@ -123,7 +123,7 @@ generate_data_function <- function(
       lens <- sample.int(max_spike_length, length(starts), replace = TRUE)
       for (i in seq_along(starts)) {
         idx <- starts[i]; end_idx <- min(idx + lens[i] - 1L, n)
-        u <- runif(1)
+        u <- stats::runif(1)
         amp1 <- min_amp1 + u * (max_amp1 - min_amp1)
         amp2 <- min_amp2 + u * (max_amp2 - min_amp2)
         sgn <- sample(c(-1, 1), 1)
@@ -169,7 +169,7 @@ generate_data_function <- function(
   if (n_drifts_s1 > 0) {
     for (i in seq_len(n_drifts_s1)) {
       duration <- sample.int(drift_duration[2] - drift_duration[1] + 1L, 1L) + drift_duration[1] - 1L
-      slope <- runif(1, drift_slope[1], drift_slope[2])
+      slope <- stats::runif(1, drift_slope[1], drift_slope[2])
       seg <- pick_segment(n, duration, buffer = 100L); if (is.null(seg)) next
       idx <- seg[1]:seg[2]
       drift <- seq(0, slope, length.out = duration)
@@ -182,7 +182,7 @@ generate_data_function <- function(
   if (n_drifts_s2 > 0) {
     for (i in seq_len(n_drifts_s2)) {
       duration <- sample.int(drift_duration[2] - drift_duration[1] + 1L, 1L) + drift_duration[1] - 1L
-      slope <- runif(1, drift_slope[1], drift_slope[2])
+      slope <- stats::runif(1, drift_slope[1], drift_slope[2])
       seg <- pick_segment(n, duration, buffer = 100L); if (is.null(seg)) next
       idx <- seg[1]:seg[2]
       drift <- seq(0, slope, length.out = duration)

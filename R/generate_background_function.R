@@ -6,11 +6,11 @@
 #' @param poisson_k Integer >= 1. Window length for the moving average.
 #' @param poisson_lambda Numeric > 0. Poisson mean.
 #' @param randomwalk_sd Numeric > 0. SD of RW increments.
-#' @param background_rho_rw Numeric in [-1, 1]. Correlation between RW increments.
+#' @param background_rho_rw Numeric between -1 and 1 (inclusive). Correlation between RW increments.
 #' @param sine_amplitude Numeric. Amplitude of the sine wave.
 #' @param sine_period Integer > 1. Period (in samples).
 #' @param background_phi Numeric in (-1, 1). AR(1) coefficient.
-#' @param background_rho Numeric in [-1, 1]. Correlation of AR(1) innovations across sensors.
+#' @param background_rho Numeric in between -1 and 1 (inclusive). Correlation of AR(1) innovations across sensors.
 #' @return A list with numeric vectors `sensor1` and `sensor2`, each of length `n`.
 #' @export
 
@@ -31,10 +31,10 @@ generate_background_function <- function(
   if (background_type == "Poisson Moving Average") {
     stopifnot(!is.null(poisson_k), poisson_k >= 1, poisson_k == as.integer(poisson_k))
     stopifnot(!is.null(poisson_lambda), poisson_lambda > 0)
-    moving <- rpois(n + poisson_k, lambda = poisson_lambda)
+    moving <- stats::rpois(n + poisson_k, lambda = poisson_lambda)
     ma <- zoo::rollmean(moving, k = poisson_k, fill = NA)
     ma <- ma[!is.na(ma)]
-    ma <- head(ma, n)
+    ma <- utils::head(ma, n)
     return(list(sensor1 = ma, sensor2 = ma))
 
   } else if (background_type == "Random Walk") {
@@ -59,8 +59,8 @@ generate_background_function <- function(
     cov_matrix <- matrix(c(1, background_rho, background_rho, 1), nrow = 2)
     innovations <- MASS::mvrnorm(n, mu = c(0, 0), Sigma = cov_matrix)
     sensor1 <- numeric(n); sensor2 <- numeric(n)
-    sensor1[1] <- rnorm(1, 0, 1 / sqrt(1 - background_phi^2))
-    sensor2[1] <- rnorm(1, 0, 1 / sqrt(1 - background_phi^2))
+    sensor1[1] <- stats::rnorm(1, 0, 1 / sqrt(1 - background_phi^2))
+    sensor2[1] <- stats::rnorm(1, 0, 1 / sqrt(1 - background_phi^2))
     for (t in 2:n) {
       sensor1[t] <- background_phi * sensor1[t - 1] + innovations[t, 1]
       sensor2[t] <- background_phi * sensor2[t - 1] + innovations[t, 2]

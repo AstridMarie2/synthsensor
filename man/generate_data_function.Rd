@@ -56,7 +56,7 @@ generate_data_function(
 
 \item{sd1, sd2}{Numeric > 0. Noise standard deviations.}
 
-\item{crosscor_noise}{Numeric in \link{-1, 1}. Correlation between sensor noise terms.}
+\item{crosscor_noise}{Numeric between -1 and 1 (inclusive). Correlation between sensor noise terms.}
 
 \item{mean1, mean2}{Numeric. Target means added via noise shift.}
 

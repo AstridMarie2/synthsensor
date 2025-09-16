@@ -1,0 +1,13 @@
+citHeader("To cite synthsensor in publications, please use:")
+
+bibentry(
+  bibtype = "Manual",
+  title   = "synthsensor: Synthetic Two-Sensor Time Series with Labeled Anomalies",
+  author  = person(given = "Astrid Marie", family = "Skålvik"),
+  year    = "2025",
+  note    = "R package version 0.0.0.9000",
+  url     = "https://github.com/AstridMarie2/synthsensor",
+  doi     = "10.5281/zenodo.xxxxxxx"  # replace after you mint the DOI
+)
+
+citFooter("If you use the interactive app, please also cite the software paper (JOSS), once available.")

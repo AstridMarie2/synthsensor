@@ -1,5 +1,4 @@
 # Wrapper so Shiny server can call with only "input" as argument:
-#' @export
 generate_data_from_input <- function(input) {
   generate_data_function(
     n = input$n,
