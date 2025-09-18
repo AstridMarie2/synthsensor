@@ -75,7 +75,7 @@ generate_data_function(
 \item{drift_slope}{Numeric vector length 2, c(min, max). Linear drift slope range.}
 }
 \value{
-A data frame with columns: \code{TimeSinceClean}, \code{Date}, \code{Sensor1}, \code{Sensor2},
+A data frame with columns: \code{Time}, \code{Date}, \code{Sensor1}, \code{Sensor2},
 \code{Measurand1}, \code{Measurand2}, \code{AnomalyFlag1}, \code{AnomalyFlag2}, and \code{Diff}.
 }
 \description{

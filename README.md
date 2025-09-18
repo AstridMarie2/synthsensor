@@ -44,71 +44,75 @@ SpikeCorr is labeled Both. **Correlation**: windows injected as
 
 ## Minimal example
 
-Generate a short dataset with a sine background, Gaussian noise, and a
-few uncorrelated spikes:
+Generate a short dataset with a AR(1) background, Gaussian noise, delay
+and attenuation for sensor1, a drifting period in sensor 2, and a few
+uncorrelated spikes for both sensors:
 
 ``` r
 library(synthsensor)
 
 df <- generate_data_function(
-  n = 300,
-  add_background   = TRUE,
-  background_type  = "Sine Wave",
-  sine_amplitude   = 2,
-  sine_period      = 30,
-  sd1 = 0.15, sd2 = 0.15,
-  crosscor_noise   = 0,
-  mean1 = 0.5, mean2 = -0.5,
-  # anomalies
-  n_spikes_corr    = 0,
-  n_spikes_s1      = 3,
-  n_spikes_s2      = 2,
-  max_spike_length = 6,
-  n_drifts_s1      = 1,
-  n_drifts_s2      = 0,
-  drift_duration   = c(25, 35),
-  drift_slope      = c(0.05, 0.08),
-  delayed_sensor   = "None",
-  alpha_ema        = 0.3
+    n = 300,
+    # Background signal
+    add_background   = TRUE,
+    background_type  = "AR(1) Process", # Select between "Poisson Moving Average", "Random Walk", "Sine Wave", "AR(1) Process" and 
+    background_phi = 0.97, # Autocorrelation (in time)
+    background_rho = 1, # Correlation between sensors
+    # Noise parameters
+    sd1 = 0.15, sd2 = 0.15,
+    crosscor_noise   = 0,
+    mean1 = 10, mean2 = 10,
+    # Anomalies
+    n_spikes_corr    = 0,
+    n_spikes_s1      = 3,
+    n_spikes_s2      = 2,
+    max_spike_length = 6,
+    n_drifts_s1      = 0,
+    n_drifts_s2      = 1,
+    drift_duration   = c(75, 100), # Drift duration range
+    drift_slope      = c(1, 2), # Drift slope range
+    # Delay
+    delayed_sensor   = "Sensor1", # "None", "Sensor1" or "Sensor2"
+    alpha_ema        = 0.3 # For selected delayed sensor
 )
 
 head(df)
-#>   TimeSinceClean  Sensor1    Sensor2                Date AnomalyFlag1 AnomalyFlag2 Measurand1  Measurand2      Diff
-#> 1              1 1.024476 -0.1734142 2025-01-01 00:00:00       Normal       Normal  0.9158234 -0.08417662 1.1978903
-#> 2              2 1.427743  0.2737805 2025-01-01 01:00:00       Normal       Normal  1.3134733  0.31347329 1.1539626
-#> 3              3 1.817718  0.9042105 2025-01-01 02:00:00       Normal       Normal  1.6755705  0.67557050 0.9135072
-#> 4              4 2.145533  0.9916997 2025-01-01 03:00:00       Normal       Normal  1.9862897  0.98628965 1.1538333
-#> 5              5 2.298991  1.2462778 2025-01-01 04:00:00       Normal       Normal  2.2320508  1.23205081 1.0527134
-#> 6              6 2.353803  1.6542066 2025-01-01 05:00:00       Normal       Normal  2.4021130  1.40211303 0.6995960
+#>   Time   Sensor1   Sensor2                Date AnomalyFlag1 AnomalyFlag2 Measurand1 Measurand2       Diff
+#> 1    1  7.700060  7.579347 2025-01-01 00:00:00       Normal       Normal   7.694511   7.694511  0.1207133
+#> 2    2  8.189320  9.179342 2025-01-01 01:00:00       Normal       Normal   9.322384   9.322384 -0.9900228
+#> 3    3  8.780835  9.253083 2025-01-01 02:00:00       Normal       Normal   9.413221   9.413221 -0.4722485
+#> 4    4  8.737307  9.492277 2025-01-01 03:00:00       Normal       Normal   9.560112   9.560112 -0.7549702
+#> 5    5  9.617662 11.335790 2025-01-01 04:00:00       Normal       Normal  11.288374  11.288374 -1.7181279
+#> 6    6 10.322373 11.406246 2025-01-01 05:00:00       Normal       Normal  11.710639  11.710639 -1.0838729
 ```
 
 Quick look at the series and labels:
 
 ``` r
-oldpar <- par(no.readonly = TRUE); on.exit(par(oldpar))
-par(mar = c(3,4,1,1))
-plot(df$TimeSinceClean, df$Sensor1, type = "l", xlab = "t", ylab = "Reading")
-lines(df$TimeSinceClean, df$Sensor2, lty = 2)
-legend("topleft", legend = c("Sensor1","Sensor2"), lty = c(1,2), bty = "n")
+plot(df$Time, df$Sensor1, type = "l", col = "blue", lwd = 2, ylim = range(c(df$Sensor1, df$Sensor2)),
+         main = "Synthetic sensor data",
+         ylab = "Reading", xlab = "Time", lty = 1)
+    lines(df$Sensor2, col = "red", lwd = 2, lty = 2)
+    legend("topright", legend = c("Sensor 1", "Sensor 2"), col = c("blue", "red"), lty = c(1,2))
 ```
 
-<img src="man/figures/README-unnamed-chunk-2-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" />
 
 ``` r
-
+    
 table(Anom1 = df$AnomalyFlag1)
 #> Anom1
 #>    Normal     Drift     Spike      Both SpikeCorr 
-#>       265        24         3         8         0
+#>       293         0         7         0         0
 table(Anom2 = df$AnomalyFlag2)
 #> Anom2
 #>    Normal     Drift     Spike      Both SpikeCorr 
-#>       291         0         9         0         0
+#>       214        77         6         3         0
 ```
 
 # Shiny app
 
-Launch the interactive app:
+Launch the interactive shiny app:
 
 ``` r
 # synthsensor::app_synth()
@@ -125,10 +129,12 @@ Run the automated tests:
 devtools::test()
 #> i Testing synthsensor
 #> v | F W  S  OK | Context
-#> / |          0 | generate_background_function                                                                         / |         16 | generate_background_function                                                                         v |         19 | generate_background_function
-#> / |          0 | generate_data_function                                                                               | |          7 | generate_data_function                                                                               v |         18 | generate_data_function
+#> / |          0 | generate_background_function                                                                                                    \ |          6 | generate_background_function                                                                                                    / |         12 | generate_background_function                                                                                                    \ |         18 | generate_background_function                                                                                                    v |         19 | generate_background_function
+#> / |          0 | generate_data_function                                                                                                          - |          5 | generate_data_function                                                                                                          | |          7 | generate_data_function                                                                                                          | |         11 | generate_data_function                                                                                                          \ |         14 | generate_data_function                                                                                                          \ |         18 | generate_data_function                                                                                                          v |         18 | generate_data_function
 #> 
-#> == Results ===========================================================================================================
+#> == Results ======================================================================================================================================
+#> Duration: 1.4 s
+#> 
 #> [ FAIL 0 | WARN 0 | SKIP 0 | PASS 37 ]
 ```
 

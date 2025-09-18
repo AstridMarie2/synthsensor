@@ -59,52 +59,56 @@ Normal, Drift, Spike, Both, SpikeCorr
 
 ## Minimal example
 
-Generate a short dataset with a sine background, Gaussian noise, and a few uncorrelated spikes:
+Generate a short dataset with a AR(1) background, Gaussian noise, delay and attenuation for sensor1, a drifting period in sensor 2, and a few uncorrelated spikes for both sensors:
 
 ```{r example}
 library(synthsensor)
 
 df <- generate_data_function(
-  n = 300,
-  add_background   = TRUE,
-  background_type  = "Sine Wave",
-  sine_amplitude   = 2,
-  sine_period      = 30,
-  sd1 = 0.15, sd2 = 0.15,
-  crosscor_noise   = 0,
-  mean1 = 0.5, mean2 = -0.5,
-  # anomalies
-  n_spikes_corr    = 0,
-  n_spikes_s1      = 3,
-  n_spikes_s2      = 2,
-  max_spike_length = 6,
-  n_drifts_s1      = 1,
-  n_drifts_s2      = 0,
-  drift_duration   = c(25, 35),
-  drift_slope      = c(0.05, 0.08),
-  delayed_sensor   = "None",
-  alpha_ema        = 0.3
+    n = 300,
+    # Background signal
+    add_background   = TRUE,
+    background_type  = "AR(1) Process", # Select between "Poisson Moving Average", "Random Walk", "Sine Wave", "AR(1) Process" and 
+    background_phi = 0.97, # Autocorrelation (in time)
+    background_rho = 1, # Correlation between sensors
+    # Noise parameters
+    sd1 = 0.15, sd2 = 0.15,
+    crosscor_noise   = 0,
+    mean1 = 10, mean2 = 10,
+    # Anomalies
+    n_spikes_corr    = 0,
+    n_spikes_s1      = 3,
+    n_spikes_s2      = 2,
+    max_spike_length = 6,
+    n_drifts_s1      = 0,
+    n_drifts_s2      = 1,
+    drift_duration   = c(75, 100), # Drift duration range
+    drift_slope      = c(1, 2), # Drift slope range
+    # Delay
+    delayed_sensor   = "Sensor1", # "None", "Sensor1" or "Sensor2"
+    alpha_ema        = 0.3 # For selected delayed sensor
 )
 
 head(df)
+
 
 ```
 
 Quick look at the series and labels:
 ```{r}
-oldpar <- par(no.readonly = TRUE); on.exit(par(oldpar))
-par(mar = c(3,4,1,1))
-plot(df$TimeSinceClean, df$Sensor1, type = "l", xlab = "t", ylab = "Reading")
-lines(df$TimeSinceClean, df$Sensor2, lty = 2)
-legend("topleft", legend = c("Sensor1","Sensor2"), lty = c(1,2), bty = "n")
-
+plot(df$Time, df$Sensor1, type = "l", col = "blue", lwd = 2, ylim = range(c(df$Sensor1, df$Sensor2)),
+         main = "Synthetic sensor data",
+         ylab = "Reading", xlab = "Time", lty = 1)
+    lines(df$Sensor2, col = "red", lwd = 2, lty = 2)
+    legend("topright", legend = c("Sensor 1", "Sensor 2"), col = c("blue", "red"), lty = c(1,2))
+    
 table(Anom1 = df$AnomalyFlag1)
 table(Anom2 = df$AnomalyFlag2)
 
 ```
 
 # Shiny app
-Launch the interactive app:
+Launch the interactive shiny app:
 ```{r}
 # synthsensor::app_synth()
 ```

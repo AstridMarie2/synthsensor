@@ -19,7 +19,7 @@
 #' @param n_drifts_s1,n_drifts_s2 Integers >= 0. Uncorrelated drift windows per sensor.
 #' @param drift_duration Integer vector length 2, c(min, max), min >= 2.
 #' @param drift_slope Numeric vector length 2, c(min, max). Linear drift slope range.
-#' @return A data frame with columns: `TimeSinceClean`, `Date`, `Sensor1`, `Sensor2`,
+#' @return A data frame with columns: `Time`, `Date`, `Sensor1`, `Sensor2`,
 #'   `Measurand1`, `Measurand2`, `AnomalyFlag1`, `AnomalyFlag2`, and `Diff`.
 #' @export
 
@@ -58,11 +58,11 @@ generate_data_function <- function(
 
   # ---- base df
   df <- data.frame(
-    TimeSinceClean = seq_len(n),
+    Time = seq_len(n),
     Sensor1 = numeric(n),
     Sensor2 = numeric(n)
   )
-  df$Date <- as.POSIXct("2025-01-01 00:00:00", tz = "UTC") + (df$TimeSinceClean - 1) * 3600
+  df$Date <- as.POSIXct("2025-01-01 00:00:00", tz = "UTC") + (df$Time - 1) * 3600
   df$AnomalyFlag1 <- new_flag_vec(n)
   df$AnomalyFlag2 <- new_flag_vec(n)
 
@@ -111,8 +111,8 @@ generate_data_function <- function(
 
   # ---- spike amplitude bounds
   min_amp1 <- 2 * sd1; min_amp2 <- 2 * sd2
-  max_amp1 <- max(mean1 * spike_size, mean1 * 1)
-  max_amp2 <- max(mean2 * spike_size, mean2 * 1)
+  max_amp1 <- max(mean1 * spike_size, abs(mean1) * 1)
+  max_amp2 <- max(mean2 * spike_size, abs(mean2) * 1)
 
   draw_uamp <- function(minv, maxv) stats::runif(1, minv, maxv)
 

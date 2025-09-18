@@ -4,7 +4,7 @@ username: sensordiagnostics
 account: sensordiagnostics
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
-appId: 15465722
+appId: 15489581
 bundleId:
 url: https://sensordiagnostics.shinyapps.io/app_synth/
 version: 1

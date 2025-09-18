@@ -1,2 +1,2 @@
-# app.R at the repo root
-synthsensor::app_synth()
+library(synthsensor)
+app_synth()

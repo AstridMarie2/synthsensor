@@ -8,7 +8,7 @@ test_that("shape, columns, factor flags", {
     delayed_sensor = "None", alpha_ema = 0.3
   )
   expect_equal(nrow(out), 100L)
-  expect_true(all(c("TimeSinceClean","Sensor1","Sensor2","Date",
+  expect_true(all(c("Time","Sensor1","Sensor2","Date",
                     "Measurand1","Measurand2","AnomalyFlag1","AnomalyFlag2","Diff") %in% names(out)))
   expect_true(is.factor(out$AnomalyFlag1))
   expect_true(is.factor(out$AnomalyFlag2))
