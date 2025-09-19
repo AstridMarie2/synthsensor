@@ -1,6 +1,6 @@
 Package: synthsensor
 Title: Synthetic Two-Sensor Time Series with Labeled Anomalies
-Version: 0.0.0.9000
+Version: 0.1.0
 Authors@R: 
     person("Astrid Marie", "Skålvik", 
            email = "astrid.marie.skalvik@gmail.com", 
