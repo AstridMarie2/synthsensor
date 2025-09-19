@@ -3,9 +3,9 @@
 cff-version: 1.2.0
 message: "If you use this software, please cite it using the metadata below."
 title: "synthsensor: Synthetic Two-Sensor Time Series with Labeled Anomalies"
-version: 0.0.0.9000
-date-released: 2025-09-15
-doi: null   # replace with Zenodo DOI after your first release (e.g., 10.5281/zenodo.1234567)
+version: 0.1.0
+date-released: 2025-09-19
+doi: 10.5281/zenodo.17157665
 license: MIT
 type: software
 abstract: >
@@ -44,7 +44,7 @@ preferred-citation:
   volume: null
   number: null
   pages: null
-  doi: null   # fill with JOSS DOI after acceptance
+  doi: 10.5281/zenodo.17157665
   url: "https://github.com/AstridMarie2/synthsensor"
 contact:
   - email: "Astrid.marie.skalvik@gmail.com"

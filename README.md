@@ -129,8 +129,8 @@ Run the automated tests:
 devtools::test()
 #> i Testing synthsensor
 #> v | F W  S  OK | Context
-#> / |          0 | generate_background_function                                                                                                                      - |         17 | generate_background_function                                                                                                                      v |         19 | generate_background_function
-#> / |          0 | generate_data_function                                                                                                                            | |          7 | generate_data_function                                                                                                                            \ |         14 | generate_data_function                                                                                                                            v |         18 | generate_data_function
+#> / |          0 | generate_background_function                                                                                                                      | |         15 | generate_background_function                                                                                                                      v |         19 | generate_background_function
+#> / |          0 | generate_data_function                                                                                                                            | |          7 | generate_data_function                                                                                                                            - |          9 | generate_data_function                                                                                                                            v |         18 | generate_data_function
 #> 
 #> == Results ========================================================================================================================================================
 #> [ FAIL 0 | WARN 0 | SKIP 0 | PASS 37 ]
@@ -141,8 +141,8 @@ badge above).
 
 # Citation
 
-If you use **synthsensor** in research, please cite the software (Zenodo
-DOI) and the JOSS paper (once available).
+If you use **synthsensor** in research, please cite the software
+(10.5281/zenodo.17157665) and the JOSS paper (once available).
 
 # Community Guidelines
 

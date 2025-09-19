@@ -7,7 +7,7 @@ bibentry(
   year    = "2025",
   note    = "R package version 0.0.0.9000",
   url     = "https://github.com/AstridMarie2/synthsensor",
-  doi     = "10.5281/zenodo.xxxxxxx"  # replace after you mint the DOI
+  doi     = "10.5281/zenodo.17157666"
 )
 
 citFooter("If you use the interactive app, please also cite the software paper (JOSS), once available.")
