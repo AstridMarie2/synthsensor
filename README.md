@@ -96,7 +96,7 @@ plot(df$Time, df$Sensor1, type = "l", col = "blue", lwd = 2, ylim = range(c(df$S
     legend("topright", legend = c("Sensor 1", "Sensor 2"), col = c("blue", "red"), lty = c(1,2))
 ```
 
-<img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-2-1.png" width="100%" />
 
 ``` r
     
@@ -129,12 +129,10 @@ Run the automated tests:
 devtools::test()
 #> i Testing synthsensor
 #> v | F W  S  OK | Context
-#> / |          0 | generate_background_function                                                                                                    \ |          6 | generate_background_function                                                                                                    / |         12 | generate_background_function                                                                                                    \ |         18 | generate_background_function                                                                                                    v |         19 | generate_background_function
-#> / |          0 | generate_data_function                                                                                                          - |          5 | generate_data_function                                                                                                          | |          7 | generate_data_function                                                                                                          | |         11 | generate_data_function                                                                                                          \ |         14 | generate_data_function                                                                                                          \ |         18 | generate_data_function                                                                                                          v |         18 | generate_data_function
+#> / |          0 | generate_background_function                                                                                                                      - |         17 | generate_background_function                                                                                                                      v |         19 | generate_background_function
+#> / |          0 | generate_data_function                                                                                                                            | |          7 | generate_data_function                                                                                                                            \ |         14 | generate_data_function                                                                                                                            v |         18 | generate_data_function
 #> 
-#> == Results ======================================================================================================================================
-#> Duration: 1.4 s
-#> 
+#> == Results ========================================================================================================================================================
 #> [ FAIL 0 | WARN 0 | SKIP 0 | PASS 37 ]
 ```
 
@@ -145,6 +143,43 @@ badge above).
 
 If you use **synthsensor** in research, please cite the software (Zenodo
 DOI) and the JOSS paper (once available).
+
+# Community Guidelines
+
+We welcome feedback, bug reports, and contributions from the community.
+To keep things clear and productive:
+
+## Contributing
+
+- Contributions are welcome via pull requests on
+  [GitHub](https://github.com/AstridMarie2/synthsensor).
+- Please open an issue first if you plan a significant change, so we can
+  discuss it.
+- Follow the existing code style and include tests for new functionality
+  when possible.
+
+## Reporting Issues
+
+- If you encounter a bug, unexpected behavior, or documentation error,
+  please open an issue on the [issue
+  tracker](https://github.com/AstridMarie2/synthsensor/issues).
+- Include as much detail as possible: R version, operating system, and
+  minimal reproducible code if applicable.
+
+## Seeking Support
+
+- Usage questions or requests for clarification can also be raised
+  through the [issue
+  tracker](https://github.com/AstridMarie2/synthsensor/issues).
+- For general R or Shiny questions, consider also checking [Stack
+  Overflow](https://stackoverflow.com/questions/tagged/r) with the `r`
+  and `shiny` tags.
+
+## Code of Conduct
+
+- Please be respectful and constructive in all interactions.
+- We follow the [Contributor
+  Covenant](https://www.contributor-covenant.org/) Code of Conduct.
 
 # Licence
 

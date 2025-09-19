@@ -702,18 +702,49 @@ CSV with labels.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">test</span>()</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; i Testing synthsensor</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; v | F W  S  OK | Context</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; / |          0 | generate_background_function                                                                                                    \ |          6 | generate_background_function                                                                                                    / |         12 | generate_background_function                                                                                                    \ |         18 | generate_background_function                                                                                                    v |         19 | generate_background_function</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; / |          0 | generate_data_function                                                                                                          - |          5 | generate_data_function                                                                                                          | |          7 | generate_data_function                                                                                                          | |         11 | generate_data_function                                                                                                          \ |         14 | generate_data_function                                                                                                          \ |         18 | generate_data_function                                                                                                          v |         18 | generate_data_function</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; / |          0 | generate_background_function                                                                                                                      - |         17 | generate_background_function                                                                                                                      v |         19 | generate_background_function</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; / |          0 | generate_data_function                                                                                                                            | |          7 | generate_data_function                                                                                                                            \ |         14 | generate_data_function                                                                                                                            v |         18 | generate_data_function</span></span>
 <span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; == Results ======================================================================================================================================</span></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Duration: 1.4 s</span></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [ FAIL 0 | WARN 0 | SKIP 0 | PASS 37 ]</span></span></code></pre></div>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; == Results ========================================================================================================================================================</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [ FAIL 0 | WARN 0 | SKIP 0 | PASS 37 ]</span></span></code></pre></div>
 <p>Continuous Integration runs R CMD check and tests on pushes/PRs (see
 the badge above).</p>
 <h1 id="citation">Citation</h1>
 <p>If you use <strong>synthsensor</strong> in research, please cite the
 software (Zenodo DOI) and the JOSS paper (once available).</p>
+<h1 id="community-guidelines">Community Guidelines</h1>
+<p>We welcome feedback, bug reports, and contributions from the
+community. To keep things clear and productive:</p>
+<h2 id="contributing">Contributing</h2>
+<ul>
+<li>Contributions are welcome via pull requests on <a href="https://github.com/AstridMarie2/synthsensor">GitHub</a>.</li>
+<li>Please open an issue first if you plan a significant change, so we
+can discuss it.</li>
+<li>Follow the existing code style and include tests for new
+functionality when possible.</li>
+</ul>
+<h2 id="reporting-issues">Reporting Issues</h2>
+<ul>
+<li>If you encounter a bug, unexpected behavior, or documentation error,
+please open an issue on the <a href="https://github.com/AstridMarie2/synthsensor/issues">issue
+tracker</a>.</li>
+<li>Include as much detail as possible: R version, operating system, and
+minimal reproducible code if applicable.</li>
+</ul>
+<h2 id="seeking-support">Seeking Support</h2>
+<ul>
+<li>Usage questions or requests for clarification can also be raised
+through the <a href="https://github.com/AstridMarie2/synthsensor/issues">issue
+tracker</a>.</li>
+<li>For general R or Shiny questions, consider also checking <a href="https://stackoverflow.com/questions/tagged/r">Stack Overflow</a>
+with the <code>r</code> and <code>shiny</code> tags.</li>
+</ul>
+<h2 id="code-of-conduct">Code of Conduct</h2>
+<ul>
+<li>Please be respectful and constructive in all interactions.</li>
+<li>We follow the <a href="https://www.contributor-covenant.org/">Contributor Covenant</a>
+Code of Conduct.</li>
+</ul>
 <h1 id="licence">Licence</h1>
 <p>MIT (C) Astrid Marie Skålvik</p>
 
